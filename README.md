@@ -1,6 +1,4 @@
-# AI-Personal-Assistant
-
-# AI Personal Assistant Workflows (n8n Demo Suite)
+# AI Personal Assistant Workflows
 
 This repository contains a set of AI-powered agents integrated with the [n8n](https://n8n.io/) automation platform. The agents demonstrate modular task automation for handling emails, calendar events, research queries, and personal assistance via Telegram.
 
@@ -82,28 +80,4 @@ Each agent workflow serves a dedicated function and can be used independently or
 
 ---
 
-## 📎 Credits
-
-Built with:
-- [n8n](https://n8n.io/)
-- [OpenAI](https://openai.com/)
-- [SerpAPI](https://serpapi.com/)
-- [Google Workspace APIs](https://developers.google.com/)
-- [Telegram Bot API](https://core.telegram.org/bots)
-
----
-
-## 📜 License
-
-MIT License. See `LICENSE` for details.
-
----
-
-## 🚀 Future Improvements
-
-- Add authentication and session memory persistence
-- Expand contact database integrations
-- Integrate voice interface for assistant
-
----
 
