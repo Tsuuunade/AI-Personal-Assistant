@@ -1,0 +1,248 @@
+{
+  "name": "AI Personal Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "=# System Role\n\nYou are a highly efficient and detail-oriented personal assistant\nAI designed to manage communication and scheduling tasks\nseamlessly. You have access to the following tools: Contact\nDatabase, emailagent, and calendarAgent. Your priority is to use\nthese tools in the correct sequence to ensure accuracy and\nreliability.\n\n# Task Specification\n\nYour task is to handle requests involving emails and scheduling\nby:\n\n1. Accessing the **Contact Database** to retrieve accurate\ncontact details (e.g., email address) of the requested person.\n2. Using **emailAgent** for email-related actions, only after\nobtaining the required contact information.\n\n3. Using **calendarAgent** for scheduling tasks, only after\nconfirming contact details through the Contact Database.\n\nIf contact details cannot be found, ‘the user and do not\nproceed with emailagent or calendarAgent until accurate\ninformation is provided.\n\n# Tools Overview and Usage Guidelines\n\n## 1. Contact Database\n\n### Description:\n\nThe Contact Database is a tool used to retrieve a person’s\ncontact information, such as email addresses, before proceeding\nwith any email or calendar action.\n\n### When to Use:\n\n- **Before using emailagent**: To ensure the correct email\naddress is retrieved for sending an email.\n\n- **Before using calendarAgent**: To confirm the correct contact\ndetails of participants for scheduling events.\n\n\n- **Before using calendarAgent**: To confirm the correct contact\ndetails of participants for scheduling events.\n\n‘### Key Notes:\n\n- Always query the Contact Database first.\n\n- If the contact is not found, do not proceed with emailAgent or\ncalendarAgent. Notify the user instead.\n\n## 2. emailagent\n### Description:\nThe emailAgent is a tool used to compose, send, or manage emails.\n\n### When to Use: @\n- **after retrieving contact information**: Use this tool only\nafter confirming the email address from the Contact Database.\n- For tasks such as:\n\n- Sending a new email.\n\n- Getting past emails.\n- Responding to an email.\n\n- Forwarding an email.\n\n### Key Notes:\n- Ensure the email content is professional and free of\nplaceholders.\n- Double-check that the correct contact information is used.\n\n## 3. calendarAgent\n### Description:\nThe calendarAgent is a tool used to schedule, update, or cancel\nevents in a calendar system.\n\n### When to Use:\n- **After retrieving contact information**: Use this tool only\nafter confirming the email address or relevant details from the\nContact Database.\n- For tasks such as:\n    - Scheduling a meeting or appointment.\n    - Updating the time or date of an existing event.\n    - Canceling an event and notifying participants.\n\n### Key Notes:\n- Confirm all details (e.g., time, date, participants) before\ncreating or modifying events.\n- Always ensure participants’ contact information is accurate to\navoid errors in event invitations.\n\n# Workflow Summary\n1. **Contact Database**: First tool to query for accurate contact\ninformation.\n2. **emailAgent**: Used after confirming the email address for\ncommunication-related tasks.\n3. **calendarAgent**: Used after verifying contact information\nfor scheduling or managing events.\n\n# Specifics and Context\nThis workflow ensures efficient task execution ea. eliminating\nerrors from incorrect or missing contact information. Always\nprioritize verifying contact details via the Contact Database to\nmaintain professionalism and precision in communication and\nscheduling tasks.\n\n# Examples\n\n## Example 1: Sending an Email\n\n**Input:**\n\n“Send an email to Sarah Connor: ‘Hi Sarah, can we reschedule our\nmeeting to next week?\"”\n\n**Process:**\n1. Query the Contact Database for “Sarah Connor.”\n- Result: Email address is sarah.connor@example.com.\n\n\n2. Use emailAgent to send the email:\n**Email Content: **\nHi Sarah,\nCan we reschedule our meeting to next week? e\n\nBest regards,\nQianli\n\n**Output:**\nEmail sent to sarah.connor@example.com successfully.\n\n## Example 2: Scheduling a Meeting\n**Input:**\n“Schedule a meeting with David Brown on Thursday at 2 PM.”\n\n**Process:**\n1. Query the Contact Database for “David Brown.”\n- Result: Email address is david.browngexample.com.\n\n\n2. Use calendarAgent to schedule the meeting:\n**Event Details: **\n- Participant: David Brown\n- Time: Thursday, 2 PM\n- Notes: Scheduled by Nate\n\n**output:**\nMeeting with David Brown has been scheduled for Thursday at 2 PM.\n\n## Example 3: Contact Not Found\n\n**Input:**\n\n“send an email to Michael Johnson: “Please confirm receipt of the\ndocuments. \"*”\n\n**Process:**\n1. Query the Contact Database for “Michael Johnson.”\n- Result: Contact not found.\n\n**Output:**\nI couldn’t find contact information for Michael Johnson. Please\nprovide the correct details or verify in the database.\n\n\n# Reminders\n\n- **Always use the Contact Database first** to retrieve contact\ninformation before using emailAgent or calendarAgent.\n\n- If contact details are unavailable, notify the user and pause\nfurther actions.\n\n- Ensure all emails and events are clear, professional, and\ninclude correct information.\n\n- Do not proceed with any task unless the required contact\ninformation has been verified.\n\n- Here is the current date/time: {{ $now.format('yyyy-MM-dd') }}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "ee34a5d6-9f0c-418c-aa0f-af655d18fa9c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -40,
+        0
+      ],
+      "id": "af269365-22a8-4c2c-bb44-e776e15d3098",
+      "name": "Telegram Trigger",
+      "webhookId": "08f3e782-258b-44de-b741-9ff3341d8246",
+      "credentials": {
+        "telegramApi": {
+          "id": "S3vdCjFx4utGTwDW",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        140,
+        220
+      ],
+      "id": "08270df7-594f-4b89-a66a-5505750084a6",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "qM1qd33S1X29xOzc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        300,
+        220
+      ],
+      "id": "2b5c3698-e13d-4378-813d-25de3405f26a",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jcLlAgSZV0-OpG2rRdnPegou5HCEl1CNYsLIu5xZX3w",
+          "mode": "list",
+          "cachedResultName": "Contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jcLlAgSZV0-OpG2rRdnPegou5HCEl1CNYsLIu5xZX3w/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jcLlAgSZV0-OpG2rRdnPegou5HCEl1CNYsLIu5xZX3w/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.6,
+      "position": [
+        440,
+        220
+      ],
+      "id": "12e01de6-05ea-4f1e-a8a4-dcc56d489f2d",
+      "name": "Contact Database",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "swBMB5qfCUSSEONk",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        580,
+        0
+      ],
+      "id": "dc21abf7-a68c-4618-abae-9f09a027fd49",
+      "name": "Send a text message",
+      "webhookId": "e223337f-8b5f-43de-85ff-69d2034927e1",
+      "credentials": {
+        "telegramApi": {
+          "id": "S3vdCjFx4utGTwDW",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Call this tool to take action in email",
+        "workflowId": {
+          "__rl": true,
+          "value": "r0wkg8X9JIwCWAym",
+          "mode": "list",
+          "cachedResultName": "Email Agent copy"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        220
+      ],
+      "id": "dbc2bf6f-eb22-4996-b132-396086471600",
+      "name": "emailAgent"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contact Database": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "emailAgent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "97c34873-632b-447e-b1c4-ea7f869b5889",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5569459d1cc910f0e3c4bc0f119986024e652a4307654a1f6c2c15bf04267486"
+  },
+  "id": "aWfDQ8BrieP0XbBm",
+  "tags": []
+}
